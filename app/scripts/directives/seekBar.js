@@ -38,10 +38,6 @@
 		             scope.value = percent * scope.max;
 		         };
 
-		         scope.thumbStyle = function() { // updates the position of the seek bar thumb
-					return {left: percentString() };	
-		         }
-
 
 		          scope.trackThumb = function() {
 				     $document.bind('mousemove.thumb', function(event) {
@@ -56,6 +52,10 @@
 				         $document.unbind('mouseup.thumb');
 				     });
 				 };
+
+		         scope.thumbStyle = function() { // updates the position of the seek bar thumb
+					return {left: percentString() };	
+		         }				 
 
 	         }
 	     };     	
