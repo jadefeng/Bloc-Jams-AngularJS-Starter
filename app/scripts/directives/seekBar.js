@@ -39,7 +39,7 @@
 		         };
 
 		         scope.thumbStyle = function() { // updates the position of the seek bar thumb
-					return {left: percentString()};	
+					return {left: percentString() };	
 		         }
 
 
