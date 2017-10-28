@@ -14,13 +14,23 @@
 	         templateUrl: '/templates/directives/seek_bar.html',
 	         replace: true,
 	         restrict: 'E',
-	         scope: { },
+	         scope: { 
+	         	onChange: '&'
+	         },
 	         link: function(scope,element,attributes) {
 	         	// directive logic
 	             scope.value = 0; // Holds the value of the seek bar, such as the currently playing song time or the current volume. Default value is 0.
 	             scope.max = 100; // Holds the maximum value of the song and volume seek bars. Default value is 100.
 	 
 	 			 var seekBar = $(element);
+
+				 attributes.$observe('value', function(newValue) {
+				     scope.value = newValue;
+				 });
+				 
+				 attributes.$observe('max', function(newValue) {
+				     scope.max = newValue;
+				 });	 			 
 
 	             var percentString = function () { // A function that calculates a percent based on the value and maximum value of a seek bar.
 	                 var value = scope.value;
@@ -36,6 +46,7 @@
 		         scope.onClickSeekBar = function(event) {
 		             var percent = calculatePercent(seekBar, event);
 		             scope.value = percent * scope.max;
+		             notifyOnChange(scope.value);
 		         };
 
 
@@ -44,6 +55,7 @@
 				         var percent = calculatePercent(seekBar, event);
 				         scope.$apply(function() {
 				             scope.value = percent * scope.max;
+				             notifyOnChange(scope.value);
 				         });
 				     });
 				 
@@ -51,6 +63,13 @@
 				         $document.unbind('mousemove.thumb');
 				         $document.unbind('mouseup.thumb');
 				     });
+				 };
+
+				 
+				 var notifyOnChange = function(newValue) {
+				     if (typeof scope.onChange === 'function') {
+				         scope.onChange({value: newValue});
+				     }
 				 };
 
 		         scope.thumbStyle = function() { // updates the position of the seek bar thumb
